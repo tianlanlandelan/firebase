@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="manifest" href="manifest.json">
+
+    <title>Title</title>
+
+</head>
+<script src="https://www.gstatic.com/firebasejs/5.4.2/firebase.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/5.4.2/firebase-messaging.js"></script>
+
+<script>
+    // Initialize Firebase
+    var config = {
+        apiKey: "AIzaSyAELcDTz04usF1hrvqWb9lcsc31upZFXZ8",
+        authDomain: "yangkaile-web-test.firebaseapp.com",
+        databaseURL: "https://yangkaile-web-test.firebaseio.com",
+        projectId: "yangkaile-web-test",
+        storageBucket: "yangkaile-web-test.appspot.com",
+        messagingSenderId: "52584551926"
+    };
+    firebase.initializeApp(config);
+</script>
+<body>
+
+    <script>
+        var messaging = firebase.messaging();
+        messaging.usePublicVapidKey("BMu6fwKxwkiHTcghrIR0saKbbu5LmTTpdOh4VSWEXzPEysI4L1WgQ_-fD_XzRCV7y9u96H5Y3TpklYuEUOnc96I");
+        /**
+         *  申请通知栏权限
+         */
+        messaging.requestPermission().then(function() {
+            console.log('Notification permission granted.');
+
+            /**
+             * 获取Token
+             */
+            messaging.getToken().then(function(currentToken) {
+                if (currentToken) {
+                    console.log("currentToken------");
+                    console.log(currentToken);
+                    //已申请的Token
+                    //djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7
+
+                    // sendTokenToServer(currentToken);
+                    // updateUIForPushEnabled(currentToken);
+                } else {
+                    // Show permission request.
+                    console.log('No Instance ID token available. Request permission to generate one.');
+                    // Show permission UI.
+                    // updateUIForPushPermissionRequired();
+                    // setTokenSentToServer(false);
+                }
+            }).catch(function(err) {
+                console.log('An error occurred while retrieving token. ', err);
+                // showToken('Error retrieving Instance ID token. ', err);
+                // setTokenSentToServer(false);
+            });
+        }).catch(function(err) {
+            console.log('Unable to get permission to notify.', err);
+        });
+
+        //Token刷新时的回调
+        messaging.onTokenRefresh(function() {
+            messaging.getToken().then(function(refreshedToken) {
+                console.log('Token refreshed.',refreshedToken);
+                // Indicate that the new Instance ID token has not yet been sent to the
+                // app server.
+                // setTokenSentToServer(false);
+                // Send Instance ID token to app server.
+                // sendTokenToServer(refreshedToken);
+                // ...
+            }).catch(function(err) {
+                // console.log('Unable to retrieve refreshed token ', err);
+                // showToken('Unable to retrieve refreshed token ', err);
+            });
+        });
+        /**
+         * 接收服务端消息
+         */
+        messaging.onMessage(function(payload) {
+            console.log('Message received. ', payload);
+            // ...
+        });
+    </script>
+</body>
+</html>
