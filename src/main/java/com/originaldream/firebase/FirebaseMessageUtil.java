@@ -195,7 +195,7 @@ public class FirebaseMessageUtil {
 
     public static void main(String[] args) throws Exception {
         String myChromesToken =  "djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7";
-        String myFireFoxsToken = "";
+//                               "djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7";
         init();
 
         /**
