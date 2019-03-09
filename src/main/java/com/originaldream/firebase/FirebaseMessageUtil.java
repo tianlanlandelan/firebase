@@ -17,30 +17,56 @@ import java.net.URL;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * @author yangkaile
+ * @date 2018-10-17 11:18:00
+ */
 public class FirebaseMessageUtil {
+    /**
+     * 项目ID
+     */
     private static final String PROJECT_ID = "yangkaile-web-test";
+    /**
+     * 云数据库节点
+     */
+    private static final String DATABASE_URL = "https://yangkaile-web-test.firebaseio.com";
+    /**
+     * fcm节点
+     */
     private static final String BASE_URL = "https://fcm.googleapis.com";
     private static final String FCM_SEND_ENDPOINT = "/v1/projects/" + PROJECT_ID + "/messages:send";
-
+    /**
+     * 消息发送节点
+     */
     private static final String MESSAGING_SCOPE = "https://www.googleapis.com/auth/firebase.messaging";
     private static final String[] SCOPES = { MESSAGING_SCOPE };
-
     public static final String MESSAGE_KEY = "message";
 
+    /**
+     * 本地json格式的私钥路径
+     */
     private static final String KEY = "/Users/yangkaile/key/yangkaile-web-test-firebase-adminsdk-y9uor-2ffffb82be.json";
 
+    /**
+     * 初始化 FirebaseApp
+     * @throws Exception
+     */
     private static void init() throws Exception {
         FileInputStream serviceAccount =
                 new FileInputStream(KEY);
 
         FirebaseOptions options = new FirebaseOptions.Builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
-                .setDatabaseUrl("https://yangkaile-web-test.firebaseio.com")
+                .setDatabaseUrl(DATABASE_URL)
                 .build();
-
         FirebaseApp.initializeApp(options);
     }
 
+    /**
+     * 获取accessToken
+     * @return
+     * @throws IOException
+     */
     private static String getAccessToken() throws IOException {
         GoogleCredential googleCredential = GoogleCredential
                 .fromStream(new FileInputStream(KEY))
@@ -48,6 +74,12 @@ public class FirebaseMessageUtil {
         googleCredential.refreshToken();
         return googleCredential.getAccessToken();
     }
+
+    /**
+     * 获取连接
+     * @return
+     * @throws IOException
+     */
     public static HttpURLConnection getConnection() throws IOException {
         URL url = new URL(BASE_URL + FCM_SEND_ENDPOINT);
         HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
@@ -68,6 +100,11 @@ public class FirebaseMessageUtil {
         return stringBuilder.toString();
     }
 
+    /**
+     * 向FCM发送消息并解析应答
+     * @param fcmMessage
+     * @throws IOException
+     */
     private static void sendMessage(JsonObject fcmMessage) throws IOException {
         HttpURLConnection connection = getConnection();
         connection.setDoOutput(true);
@@ -194,22 +231,16 @@ public class FirebaseMessageUtil {
 
 
     public static void main(String[] args) throws Exception {
-        String myChromesToken =  "djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7";
-//                               "djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7";
-        init();
-
         /**
-         * TODO
-         * Body和Title不支持传中文
-         * 需要研究下是不是需要转固定格式
+         * 一个有效的客户端token
          */
+        String myChromesToken =  "djKFtkMxDmE:APA91bEjUMuCQaF1n-WrFqlrLkbGeCiS-vJguvmW-zDmfAhZzBpgErj5pxgC4n0HN4oWHnXxaJPbsLmvgLksUuwWFxStuIJr9OwLBDvJiTf3Cm8pBf7xnSNetpqb3pYPqO0EcVQYWdg7";
+        init();
         FirebaseEntity entity = new FirebaseEntity();
         entity.setBody("testBody");
         entity.setTitle("testTitle");
         entity.setToken(myChromesToken);
         sendCommonMessage(entity);
-//        sendOverrideMessage(entity);
-
     }
 
 }
